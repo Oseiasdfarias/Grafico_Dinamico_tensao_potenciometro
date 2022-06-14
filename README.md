@@ -1,0 +1,1 @@
+# Grafico_Dimanico_tensao_potenciometro
