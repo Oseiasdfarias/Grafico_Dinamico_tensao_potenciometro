@@ -1,1 +1,3 @@
-# Grafico_Dimanico_tensao_potenciometro
+# Grafico Dinâmico da Tensão de um Potenciômetro
+
+
