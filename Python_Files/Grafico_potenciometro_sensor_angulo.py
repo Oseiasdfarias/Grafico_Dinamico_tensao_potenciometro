@@ -53,7 +53,7 @@ fig, ax = plt.subplots(figsize=(8, 5))
 plt.subplots_adjust(bottom=0.115, top=0.915, 
                     right=0.965, left=0.110)
 x_data = np.linspace(0, 49, 50)
-ln, = ax.plot(x_data, x_data, lw=0.9)
+ln, = ax.plot(x_data, x_data, lw=1.2)
 tx  = ax.text(45, int(fila[-1]+10), f"{fila[-1]}", color=[0.3,0.3,0.5], fontsize=12, fontweight="bold")
 
 plt.axhline(0, color='dimgray', lw=1)
