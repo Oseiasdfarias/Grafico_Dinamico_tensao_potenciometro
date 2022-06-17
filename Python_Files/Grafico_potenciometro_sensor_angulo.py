@@ -27,8 +27,7 @@ def ler_dados():
                         fila.append(graus)
                     else:
                         fila.pop(0)
-                        # print(fila)
-                        print(f"Leitura: {graus}° | type: {type(graus)}")
+                        print(f"Graus: {graus}°")
                 except Exception as erro:
                     print(f"Erro: {erro}")
                 sleep(0.03)
@@ -43,28 +42,48 @@ def ler_dados():
 
 # Thread responsável por rodar a função que se comunica com 
 # o Esp32 e colhe os dados e os processa.
-new_thread = Thread(target=ler_dados)
-new_thread.daemon = True
-new_thread.start()
+thread = Thread(target=ler_dados)
+thread.daemon = True
+thread.start()
 
 sleep(2.0)
 # Configuração do Matplotlib para plotagem do Gráfico.
 fig, ax = plt.subplots(figsize=(8, 5))
+plt.yticks(range(0, 301, 20), label="°")
+plt.xticks(range(0, 51, 2))
 plt.subplots_adjust(bottom=0.115, top=0.915, 
                     right=0.965, left=0.110)
 x_data = np.linspace(0, 49, 50)
 ln, = ax.plot(x_data, x_data, lw=1.2)
-tx  = ax.text(45, int(fila[-1]+10), f"{fila[-1]}", color=[0.3,0.3,0.5], fontsize=12, fontweight="bold")
+tx  = ax.text(45, int(fila[-1]+10), f"{fila[-1]}",
+              color=[0.3,0.3,0.5],
+              fontsize=12,
+              fontweight="bold")
 
 plt.axhline(0, color='dimgray', lw=1)
 plt.axvline(0, color='dimgray', lw=1)
-plt.xlabel("Tempo (s)", color='dimgray', fontdict={'fontsize': 12, 'fontweight': 'medium'}, fontweight="bold")
-plt.ylabel("Ângulo (G°)", color='dimgray', fontdict={'fontsize': 12, 'fontweight': 'medium'}, fontweight="bold")
+plt.xlabel("Tempo (s)", color='dimgray',
+           fontdict={
+               'fontsize': 12,
+               'fontweight': 'medium'
+           },
+           fontweight="bold")
+plt.ylabel("Ângulo (G°)", color='dimgray',
+           fontdict={
+               'fontsize': 12,
+               'fontweight': 'medium'
+           },
+           fontweight="bold")
 
 # Inicializa as configurações no gráfico quando inicializa a plotagem dinâmica.
 def init():
     ax.set_ylim(-30, 330)
-    ax.set_title("Sensor de Ângulo com Potenciômetro", color='dimgray', fontdict={'fontsize': 18, 'fontweight': 'medium'}, fontweight="bold")
+    ax.set_title("Sensor de Ângulo com Potenciômetro",
+                 color='dimgray',
+                 fontdict={
+                     'fontsize': 18,
+                     'fontweight': 'medium'},
+                 fontweight="bold")
     tx.set_y(int(fila[-1])+10)
     tx.set_text(f"{fila[-1]}")
     return ln, tx
@@ -79,7 +98,10 @@ def update(filaup):
     return ln, tx
 
 # Gerencia a Plotagem dinâmica do Gráfico.
-anima = animation.FuncAnimation(fig, update, init_func=init, interval=30)
+anima = animation.FuncAnimation(fig,
+                                update,
+                                init_func=init,
+                                interval=30)
 plt.show()
 sys.exit()
 
