@@ -23,12 +23,11 @@ def ler_dados():
                 try:
                     dados_float = float(dados1)
                     if len(fila) <= 51:
-                        tensao = ((5.0*dados_float)/4095.0)
+                        tensao = ((3.3*dados_float)/4095.0)
                         fila.append(tensao)
                     else:
                         fila.pop(0)
-                        # print(fila)
-                        print(f"Leitura: {tensao} | type: {type(tensao)}")
+                        print(f"Tensão: {tensao:.2f} V")
                 except Exception as erro:
                     print(f"Erro: {erro}")
                 sleep(0.03)
@@ -51,7 +50,7 @@ sleep(2.0)
 # Configuração do Matplotlib para plotagem do Gráfico.
 fig, ax = plt.subplots(figsize=(7, 5))
 plt.subplots_adjust(bottom=0.105, top=0.935, 
-                    right=0.965, left=0.075)
+                    right=0.965, left=0.095)
 x_data = np.linspace(0, 49, 50)
 ln, = plt.plot(x_data, x_data, lw=0.9)
 plt.axhline(0, color='gray', lw=1)
@@ -61,7 +60,7 @@ plt.ylabel("Tensão (V)", color='gray', fontdict={'fontsize': 12, 'fontweight': 
 
 # Inicializa as configurações no gráfico quando inicializa a plotagem dinâmica.
 def init():
-    ax.set_ylim(-0.5, 5.5)
+    ax.set_ylim(-0.3, 3.6)
     ax.set_title("Potenciômetro", color='gray', fontdict={'fontsize': 20, 'fontweight': 'medium'})
     return ln,
 
