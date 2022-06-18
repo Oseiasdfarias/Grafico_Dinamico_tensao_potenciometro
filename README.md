@@ -6,6 +6,6 @@ Esse projeto visa ler a tensão de um potenciômetro em tempo real com o auxíli
 
 No Computador será capturado esses dados usando o código em Python e tratado para plotar o gráfico da tensão em tempo real.
 
-<video src="https://vimeo.com/721639758"></video>
+<iframe title="vimeo-player" src="https://player.vimeo.com/video/721639758?h=8cc5097445" width="640" height="360" frameborder="0" allowfullscreen></iframe>
 
 ![banner](./utils/banner.png)
