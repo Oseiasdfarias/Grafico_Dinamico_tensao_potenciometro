@@ -1,43 +1,101 @@
 #include <Arduino.h>
-#define LED 2
 
-//variaveis que indicam o núcleo
-static uint8_t taskCoreZero = 0;
-static uint8_t taskCoreOne  = 1;
+/*-----------------
+  Oséias Farias 
+-----------------*/
 
-void ler_tensao();
+// Tarefas
+TaskHandle_t Task1;
+TaskHandle_t Task2;
+TaskHandle_t Task3;
+
+// LED pins
+const int led1 = 2;
+const int led2 = 4;
+
+void Tarefa1( void * pvParameters );
+void Tarefa2( void * pvParameters );
+void ler_tensao( void * pvParameters );
 
 void setup() {
-  Serial.begin(9600);
-  pinMode(LED, OUTPUT);
+    Serial.begin(115200); 
+    pinMode(led1, OUTPUT);
+    pinMode(led2, OUTPUT);
 
-  //cria uma tarefa que será executada na função coreTaskZero, com prioridade 1 e execução no núcleo 0
-  //coreTaskZero: piscar LED e contar quantas vezes
-//  xTaskCreatePinnedToCore(
-//                    ler_tensao,       /* função que implementa a tarefa */
-//                    "coreTaskZero",   /* nome da tarefa */
-//                    10000,            /* número de palavras a serem alocadas para uso com a pilha da tarefa */
-//                    NULL,             /* parâmetro de entrada para a tarefa (pode ser NULL) */
-//                    1,                /* prioridade da tarefa (0 a N) */
-//                    NULL,             /* referência para a tarefa (pode ser NULL) */
-//                    taskCoreZero);    /* Núcleo que executará a tarefa */
-//                    
-//  delay(500); //tempo para a tarefa iniciar
+    xTaskCreatePinnedToCore(
+        Tarefa1,      /* Função para implementar a tarefa */
+        "Tarefa1",
+        10000,
+        NULL,
+        1,
+        &Task1,
+        0
+  );
+  delay(500);
 
+  xTaskCreatePinnedToCore(
+        ler_tensao,      /* Função para implementar a tarefa */
+        "Tarefa3",
+        10000,
+        NULL,
+        2,
+        &Task1,
+        0
+  );
+  delay(500);
+
+  xTaskCreatePinnedToCore(
+        Tarefa2,      /* Função para implementar a tarefa */
+        "Tarefa2",
+        10000,
+        NULL,
+        1,
+        &Task2,
+        1
+  );
+  delay(500);
+}
+
+//Tarefa1: Pisca o LED a cada 1000 ms
+void Tarefa1( void * pvParameters ){
+  Serial.print("Tarefa 1: rodando no núcleo 0");
+  Serial.println(xPortGetCoreID());
+
+  for(;;){
+    Serial.print("Tarefa 1: rodando no núcleo 0");
+    Serial.println(xPortGetCoreID());
+    digitalWrite(led1, HIGH);
+    delay(1000);
+    digitalWrite(led1, LOW);
+    delay(1000);
+  } 
+}
+
+//Tarefa1: Pisca o LED a cada 700 ms
+void Tarefa2( void * pvParameters ){
+  Serial.print("Tarefa 1: rodando no núcleo 1");
+  Serial.println(xPortGetCoreID());
+
+  for(;;){
+    digitalWrite(led2, HIGH);
+    delay(100);
+    digitalWrite(led2, LOW);
+    delay(100);
+  }
+}
+
+void ler_tensao( void * pvParameters ){
+  // Lê a entrada no pino analógico ADC1_0:
+
+  int potenciometro;
+  for(;;){
+        potenciometro = analogRead(A0);
+        Serial.print("Tensão Quantizada: ");
+        Serial.println(potenciometro);
+        delay(500);
+  }
 }
 
 void loop() {
-  ler_tensao();
 }
 
-void ler_tensao(){
-  // Lê a entrada no analógico ADC1_0:
-  int potenciometro = analogRead(A0);
-  Serial.println(potenciometro);
-
-  digitalWrite(LED, HIGH);
-  delay(50);
-  digitalWrite(LED, LOW);
-  delay(50);
-
-}
